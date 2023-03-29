@@ -1,7 +1,9 @@
 import { Router } from "express";
 import {
   createUserController,
+  listAllUsersController,
   showUserController,
+  softDeleteUserController,
   updateUserController,
 } from "../controllers/users.controller";
 import ensureAuthMiddleware from "../middlewares/ensureAuth.middleware";
@@ -19,6 +21,7 @@ userRoutes.post(
   verifyAlreadyUserExistsMiddleware,
   createUserController
 );
+userRoutes.get("", listAllUsersController);
 userRoutes.get(
   "/:id",
   ensureUserExistsMiddleware,
@@ -33,6 +36,13 @@ userRoutes.patch(
   ensureAuthMiddleware,
   ensureIdOwnerMiddleware,
   updateUserController
+);
+userRoutes.delete(
+  "/:id",
+  ensureUserExistsMiddleware,
+  ensureAuthMiddleware,
+  ensureIdOwnerMiddleware,
+  softDeleteUserController
 );
 
 export default userRoutes;
