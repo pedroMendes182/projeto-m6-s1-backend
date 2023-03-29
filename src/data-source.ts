@@ -5,6 +5,7 @@ import { CreateUsersTable1680040695286 } from "./migrations/1680040695286-Create
 import { AddPhoneForUser1680044501466 } from "./migrations/1680044501466-AddPhoneForUser";
 import { Contact } from "./entities/contacts.entety";
 import { CreateContatcsTable1680105484758 } from "./migrations/1680105484758-CreateContatcsTable";
+import { FixEmailAndPhoneColumn1680113212268 } from "./migrations/1680113212268-FixEmailAndPhoneColumn";
 
 const AppDataSource = new DataSource(
   process.env.NODE_ENV === "test"
@@ -28,6 +29,7 @@ const AppDataSource = new DataSource(
           CreateUsersTable1680040695286,
           AddPhoneForUser1680044501466,
           CreateContatcsTable1680105484758,
+          FixEmailAndPhoneColumn1680113212268,
         ],
       }
 );

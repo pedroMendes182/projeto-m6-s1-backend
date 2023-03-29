@@ -16,10 +16,10 @@ export class Contact {
   @Column({ length: 50 })
   name: string;
 
-  @Column({ length: 50, unique: true })
+  @Column({ length: 50 })
   email: string;
 
-  @Column("numeric", { unique: true, precision: 11 })
+  @Column("numeric", { precision: 11 })
   phone: number;
 
   @CreateDateColumn()
