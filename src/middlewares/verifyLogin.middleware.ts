@@ -32,7 +32,10 @@ const verifyLoginMiddleware = async (
     throw new AppError("Wrong email/password", 400);
   }
 
-  req.user = findUser;
+  req.user = {
+    id: findUser.id,
+    isActive: findUser.isActive,
+  };
 
   return next();
 };
