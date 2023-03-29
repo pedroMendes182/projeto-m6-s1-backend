@@ -1,6 +1,8 @@
 import { DataSource } from "typeorm";
-import path from "path";
 import "dotenv/config";
+import { User } from "./entities/users.entity";
+import { CreateUsersTable1680040695286 } from "./migrations/1680040695286-CreateUsersTable";
+import { AddPhoneForUser1680044501466 } from "./migrations/1680044501466-AddPhoneForUser";
 
 const AppDataSource = new DataSource(
   process.env.NODE_ENV === "test"
@@ -19,8 +21,11 @@ const AppDataSource = new DataSource(
         database: process.env.PGDATABASE,
         logging: true,
         synchronize: false,
-        entities: [path.join(__dirname, "./entities/**.{js,ts}")],
-        migrations: [path.join(__dirname, "./migrations/**.{js,ts}")],
+        entities: [User],
+        migrations: [
+          CreateUsersTable1680040695286,
+          AddPhoneForUser1680044501466,
+        ],
       }
 );
 
