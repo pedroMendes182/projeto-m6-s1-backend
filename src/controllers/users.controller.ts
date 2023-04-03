@@ -14,7 +14,7 @@ export const createUserController = async (req: Request, res: Response) => {
 
 export const showUserController = async (req: Request, res: Response) => {
   const data = await showUserService(req.user);
-  return res.status(200).json(data);
+  return res.status(200).json({ user: data });
 };
 
 export const updateUserController = async (req: Request, res: Response) => {

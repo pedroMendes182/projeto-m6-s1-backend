@@ -19,6 +19,8 @@ const verifyUserTokenOwnerContactMiddleware = async (
     },
   });
 
+  console.log(findContact);
+
   if (findContact.user.id !== req.user.id) {
     throw new AppError("Unauthorized", 401);
   }

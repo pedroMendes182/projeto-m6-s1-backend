@@ -7,7 +7,7 @@ const updateUserService = async (data: IUserUpdate, id: string) => {
   const usersRepository = AppDataSource.getRepository(User);
 
   if (data.email) {
-    const findEmail = usersRepository.findOneBy({
+    const findEmail = await usersRepository.findOneBy({
       email: data.email,
     });
 
@@ -17,7 +17,7 @@ const updateUserService = async (data: IUserUpdate, id: string) => {
   }
 
   if (data.phone) {
-    const findPhone = usersRepository.findOneBy({
+    const findPhone = await usersRepository.findOneBy({
       phone: data.phone,
     });
 
