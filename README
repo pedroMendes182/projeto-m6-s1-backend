@@ -1,1 +1,180 @@
-PROJETO FULLSTACK M6
+PROJETO BACKEND M6:
+
+- Essa aplicação tem o intuito de criar uma conta em um site, onde voce pode cadastrar contatos
+
+Para usar a aplicação siga o passo a passo abixo;
+
+1: Para usar essa aplicação, certifique-se que tenha o NodeJS e o NPM instalados no seu computador;
+
+2: Crie um arquivo chamado .env, copie todas as chaves do arquivo .env.example, e preecha-os com seus dados (Lembre-se de criar um Database com o nome que voce inseriou em `PGDATABASE` para evitar possiveis erros de conexao);
+
+3: Instale todas as dependencias do projeto com o comando no terminal;
+3.1: `npm install`
+
+4: Apos a instalação de todas dependencias do projeto, rode as migrações, para a criação das tabelas em seu Database com o comando no terminal;
+4.1: `npm typeorm migration:run -- -d src/data-source`
+
+5: Para rodar a aplicação, digite o comando no terminal;
+5.1: `npm run dev`
+5.2: a aplicação iniciara na url: `http://localhost:3001`
+
+Rotas e parametros da API:
+
+Rotas não protegidas:
+1: Para criar um usuario:
+POST - http://localhost:3001/users
+exemplo de body para a requisição:
+{
+"name": "Name",
+"email": "example@email.com",
+"phone": 11987654321,
+"password": "password"
+}
+1.1: todos os campos são obrigatorios
+1.2: o campo "email" tem uma verificação para saber se o email é valido
+1.3: o campo "phone" deve contar 11 digitos,
+reposta:
+{
+"name": "Name",
+"email": "example@email.com",
+"phone": 11987654321,
+"id": "89362615-75d4-4bf8-a71f-be3e95421328",
+"isActive": true,
+"createdAt": "2023-03-28T23:56:23.676Z",
+"updatedAt": "2023-03-28T23:56:23.676Z"
+};
+
+2: Para fazer login:
+POST - http://localhost:3001/login
+exemplo de body para a requisição:
+{
+"email": "example@email.com",
+"password": "password"
+}
+resposta:
+{
+"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc0FjdGl2ZSI6dHJ1ZSwiaWF0IjoxNjgwNDk2MTk2LCJleHAiOjE2ODA1ODI1OTYsInN1YiI6IjQyZmNkNWM0LWE2NGYtNGQ1MC05ZWUzLTlhNTJjM2Y5MGZlNSJ9.cNvvVuxO_Be9U1NaHx7DfBbgtkxu_0oxy43MuwJW2C0",
+"uuid": "89362615-75d4-4bf8-a71f-be3e95421328"
+}
+
+Rotas protegidas:
+essas rotas é necessario o envio de token no headers para acessa-las;
+
+1: Para ver os dados do usuario logado:
+esse rota verifica se o user logado é o mesmo do id passado na URL;
+GET - http://localhost:3001/users/:id
+não contem body;
+reposta:
+{
+"id": "89362615-75d4-4bf8-a71f-be3e95421328",
+"name": "Name",
+"email": "example@email.com",
+"phone": 11987654321,
+"isActive": true,
+"createdAt": "2023-03-28T23:56:23.676Z",
+"updatedAt": "2023-03-28T23:56:23.676Z"
+"contacts": [],
+}
+
+2: Para atualizar os dados do usuario logado:
+esse rota verifica se o user logado é o mesmo do id passado na URL;
+só é possivel atualizar os campos "name", "email", "phone" e "password"
+PATCH - http://localhost:3001/users/:id
+exemplo de body para a requisição:
+{
+"email": "emailUpdate@email.com"
+}
+2.1: o campo "email" tem uma verificação para saber se o email é valido
+2.2: o campo "phone" deve contar 11 digitos,
+resposta:
+{
+"id": "89362615-75d4-4bf8-a71f-be3e95421328",
+"name": "Name",
+"email": "emailUpdate@email.com",
+"phone": 11987654321,
+"isActive": true,
+"createdAt": "2023-03-28T23:56:23.676Z",
+"updatedAt": "2023-04-03T04:39:45.131Z"
+}
+
+3: Para desativar a conta do usuario logado:
+esse rota verifica se o user logado é o mesmo do id passado na URL;
+apenas o proprio usuario pode desativar sua conta;
+DELETE - http://localhost:3001//users
+essa rota não contem body;
+essa rota não contem resposta;
+
+4: Para criação de um contato:
+essa rota cria um contato para o usuario logado;
+POST - http://localhost:3001//users/contacts
+exemplo de body para a requisição:
+{
+"name": "Contact",
+"email": "contact@mail.com",
+"phone": 11912345678,
+}
+4.1: todos os campos são obrigatorios
+4.2: o campo "email" tem uma verificação para saber se o email é valido
+4.3: o campo "phone" deve contar 11 digitos
+resposta:
+{
+"id": "a768a4a2-d50b-4e9b-8042-2ae7fb935ab2",
+"name": "Contact",
+"email": "contact@mail.com",
+"phone": 11912345678,
+"createdAt": "2023-03-29T18:02:00.159Z",
+"updatedAt": "2023-03-29T18:02:00.159Z"
+"user": {
+"id": "89362615-75d4-4bf8-a71f-be3e95421328",
+"name": "Pedro Mendes",
+"email": "pmendes111@yahoo.com.br",
+"phone": "11920055768"
+},
+}
+
+5: Para visualizar um contato:
+o id do contato precisa ser passado na URL;
+o usuario logado só tem permissão para ver seus proprios contatos
+GET - http://localhost:3001//users/contacts/:id
+essa requisição não tem body;
+reposta:
+{
+"id": "a768a4a2-d50b-4e9b-8042-2ae7fb935ab2",
+"name": "Contact",
+"email": "contact@mail.com",
+"phone": 11912345678,
+"createdAt": "2023-03-29T18:02:00.159Z",
+"updatedAt": "2023-03-29T18:02:00.159Z"
+}
+
+6: Para atualizar um contato:
+o id do contato precisa ser passado na URL;
+o usuario logado só tem permissão para atualizar seus proprios contatos
+só é possivel atualizar os campos "name", "email", "phone"
+PATCH - http://localhost:3001//users/contacts/:id
+exemplo de body para requisição:
+{
+"email": "contactUpdate@mail.com",
+}
+6.1: o campo "email" tem uma verificação para saber se o email é valido
+6.2: o campo "phone" deve contar 11 digitos
+reposta:
+{
+"id": "a768a4a2-d50b-4e9b-8042-2ae7fb935ab2",
+"name": "Contact",
+"email": "contactUpdate@mail.com",
+"phone": 11912345678,
+"createdAt": "2023-03-29T18:02:00.159Z",
+"updatedAt": "2023-03-29T18:02:00.159Z"
+}
+
+7: Para deletar um contato:
+o id do contato precisa ser passado na URL;
+o usuario logado só tem permissão para deletar seus proprios contatos
+DELETE - http://localhost:3001//users/contacts/:id
+essa rota não contem body;
+essa rota não tem respota;
+
+Em desenvolvimento:
+
+- Apos desativar sua conta, o usuario conseguir reativar ela, e ter todos seus dados recuperados;
